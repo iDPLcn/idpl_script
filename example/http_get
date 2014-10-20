@@ -1,0 +1,6 @@
+#!/bin/sh
+
+#./idpl_data_transfer --destination ./zwtest/ --source /nginx/zwtest/ --target 115.25.138.228:11401 --direction get --member 3 --parallel 2 --protocol http --name data --number 3
+#./idpl_data_transfer --destination ./zwtest/ --source /nginx/zwtest/ --target 115.25.138.228:11401 --direction get --parallel 5 --protocol http --name data --number 10
+#./idpl_data_transfer -t 115.25.138.228:11401 -s /nginx/zwtest/ -d ./zwtest/ -n data -p http -D get -N 10 -P 5
+./idpl_data_transfer -t 10.4.9.191:11401 -s /nginx/zwtest/ -d ./zwtest/ -n data -p http -D get -N 10 -P 5

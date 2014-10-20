@@ -1,0 +1,44 @@
+#!/bin/sh
+
+if (($# == 0))
+then
+    echo "Usage"
+	exit 2
+fi
+
+eval set -- `getopt -o "d:n:s:N:u:h" -l "dictionary:,name:,size:,number:unit:,help" -n "idpl_data_generator.sh" -- "$@"`
+
+while [ -n "${1}" ]
+do
+	case ${1} in
+	-d|--dictionary)
+		dictionary=${2}
+		shift;;
+	-n|--name)
+		name=${2}
+		shift;;
+	-s|--size)
+		size=${2}
+		shift;;
+	-N|--number)
+		number=${2}
+		shift;;
+	-u|--unit)
+		unit=${2}
+		shift;;
+	-h|--help)
+		echo "Usage"
+		exit 0;;
+	--)
+		shift
+		break;;
+	esac
+	shift
+done
+
+mkdir -p $dictionary
+
+for (( i = 0; i < $number; i++ ))
+do
+	dd if=/dev/zero of=$dictionary/$name.$i bs=$size$unit seek=1 count=0
+done

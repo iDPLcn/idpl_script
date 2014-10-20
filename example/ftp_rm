@@ -1,0 +1,3 @@
+#!/bin/sh
+
+../bin/idpl_data_rm -t 10.4.9.191 -d /upload/zwtest/data/ -n data -p ftp -N 10 FTP_USER=idpl_test FTP_PASSWD=idpl_test@409

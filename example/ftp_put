@@ -1,0 +1,5 @@
+#!/bin/sh
+
+#./idpl_data_transfer --destination /upload/zwtest/ --source ./zwtest/ --target 115.25.138.228 --direction put --member 3 --parallel 2 --protocol ftp --name data --number 10
+../bin/idpl_data_transfer --destination /upload/zwtest/data/ --source ../data/ --target 10.4.9.191 --direction put            --parallel 5 --protocol ftp --name data --number 10 FTP_USER=idpl_test FTP_PASSWD=idpl_test@409
+#./idpl_data_transfer --destination /upload/zwtest/data/ --source ./zwtest/ --target 159.226.15.235 --direction put            --parallel 5 --protocol ftp --name data --number 10 FTP_USER=idpl FTP_PASSWD=idpl@buaa

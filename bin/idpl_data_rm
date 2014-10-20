@@ -1,0 +1,58 @@
+#!/bin/sh
+
+FTP_USER="yyqftp"
+FTP_PASSWD="yyqftp"
+
+if (($# == 0))
+then
+    echo "Usage"
+	exit 2
+fi
+
+eval set -- `getopt -o "t:d:n:p:N:6h" -l "target:,dictionary:,name:,protocol:,number:,ipv6,help" -n "idpl_data_rm.sh" -- "$@"`
+
+while [ -n "${1}" ]
+do
+	case ${1} in
+	-t|--target)
+		target=${2}
+		shift;;
+	-d|--dictionary)
+		dic=${2}
+		shift;;
+	-n|--name)
+		name=${2}
+		shift;;
+	-p|--protocol)
+		protocol=${2}
+		shift;;
+	-N|--number)
+		number=${2}
+		shift;;
+	-h|--help)
+		echo "get help"
+		exit 0;;
+	--)shift
+		break;;
+	esac
+	shift
+done
+
+if (( $# != 0 ))
+then
+	export "$@"
+fi
+
+if [ "$protocol" ] && [ $prototol="ftp" ]
+then
+	for ((i = 0; i < $number; i++))	
+	do
+		curl -u $FTP_USER:$FTP_PASSWD $ipv6 ftp://$target -Q "dele $dic$name.$i"
+	done
+	wait
+	curl -u $FTP_USER:$FTP_PASSWD $ipv6 ftp://$target -Q "rmd $dic"
+else
+	rm -rf $dic
+fi
+
+exit 0

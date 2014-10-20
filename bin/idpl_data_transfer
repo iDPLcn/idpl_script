@@ -1,0 +1,149 @@
+#!/bin/sh
+
+FTP_USER="yyqftp"
+FTP_PASSWD="yyqftp"
+
+if (($# == 0))
+then
+    echo "Usage"	#TO DO, help infomation
+	exit 2
+fi
+
+eval set -- `getopt -o "t:s:d:n:p:D:N:P:6h" -l "target:,source:,destination:,name:,protocol:,direction:,number:,parallel:,ipv6,help" -n "idpl_data_transfer.sh" -- "$@"`
+
+while [ -n "${1}" ]
+do
+	case ${1} in
+	-d|--destination)
+		destination=${2}
+		shift;;
+	-s|--source)
+		source=${2}
+		shift;;
+	-D|--direction)
+		direction=${2}
+		shift;;
+	-t|--target)
+		target=${2}
+		shift;;
+	-m|--member)
+		member=${2}
+		shift;;
+	-P|--parallel)
+		parallel=${2}
+		shift;;
+	-p|--protocol)
+		protocol=${2}
+		shift;;
+	-n|--name)
+		name=${2}
+		shift;;
+	-N|--number)
+		number=${2}
+		shift;;
+	-6|--ipv6)
+		ipv6="-6";;
+	-h|--help)
+		echo "get help"	#TO DO, help information
+		exit 0;;
+	--)
+		shift
+		break;;
+	esac
+	shift
+done
+
+[ "$member" ] || member=$number
+
+if (( $# != 0))
+then
+	export "$@"
+fi
+
+function min {
+	if (( $1 > $2 ))
+	then
+		echo $2
+	else
+		echo $1
+	fi
+}
+
+function ftpget {
+	mkdir -p $destination
+	for ((i = 0; i < $number; i = i + $member))
+	do
+		max_j=`min $number $[$member + $i]`
+		for ((j = $i; j < $max_j; j = j + $parallel))
+		do
+			max_k=`min $max_j $[$parallel + $j]`
+			for ((k = $j; k < $max_k; k++))
+			do
+				{
+					curl -u $FTP_USER:$FTP_PASSWD $ipv6 ftp://$target$source$name.$k -o $destination$name.$k
+				}&
+			done
+			wait
+		done
+	done
+}
+
+function ftpput {
+	curl -u $FTP_USER:$FTP_PASSWD --ftp-create-dirs $ipv6 ftp://$target$destination
+	for ((i = 0; i < $number; i = i + $member))
+	do
+		max_j=`min $number $[$member + $i]`
+		for ((j = $i; j < $max_j; j = j + $parallel))
+		do
+			max_k=`min $max_j $[$parallel + $j]`
+			for ((k = $j; k < $max_k; k++))
+			do
+				{
+					curl -u $FTP_USER:$FTP_PASSWD $ipv6 ftp://$target$destination$name.$k -T $source$name.$k
+				}&
+			done
+			wait
+		done
+	done
+}
+
+function httpget {
+	mkdir -p $destination
+	for ((i = 0; i < $number; i = i + $member))
+	do
+		max_j=`min $number $[$member + $i]`
+		for ((j = $i; j < $max_j; j = j + $parallel))
+		do
+			max_k=`min $max_j $[$parallel + $j]`
+			for ((k = $j; k < $max_k; k++))
+			do
+				{
+					curl $ipv6 http://$target$source$name.$k -o $destination$name.$k
+				}&
+			done
+			wait
+		done
+	done
+}
+
+if [ $protocol = "ftp" ]
+then
+	if [ $direction = "get" ]
+	then
+		`ftpget`
+	elif [ $direction = "put" ]
+	then
+		`ftpput`
+	fi
+elif [ $protocol = "http" ]
+then
+	if [ $direction = "get" ]
+	then
+		`httpget`
+	elif [ $direction = "put" ]
+	then
+		echo "no put for http"	# TO DO
+		exit 1
+	fi
+fi
+
