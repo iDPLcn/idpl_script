@@ -40,5 +40,5 @@ mkdir -p $dictionary
 
 for (( i = 0; i < $number; i++ ))
 do
-	dd if=/dev/zero of=$dictionary/$name.$i bs=$size$unit seek=1 count=0
+	dd if=/dev/zero of=$dictionary/$name.$i bs=$size$unit seek=1 count=0 > /dev/null
 done

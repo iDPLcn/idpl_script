@@ -47,10 +47,10 @@ if [ "$protocol" ] && [ $prototol="ftp" ]
 then
 	for ((i = 0; i < $number; i++))	
 	do
-		curl -u $FTP_USER:$FTP_PASSWD $ipv6 ftp://$target -Q "dele $dic$name.$i"
+		curl -u $FTP_USER:$FTP_PASSWD $ipv6 ftp://$target -Q "dele $dic$name.$i" > /dev/null
 	done
 	wait
-	curl -u $FTP_USER:$FTP_PASSWD $ipv6 ftp://$target -Q "rmd $dic"
+	curl -u $FTP_USER:$FTP_PASSWD $ipv6 ftp://$target -Q "rmd $dic" > /dev/null
 else
 	rm -rf $dic
 fi

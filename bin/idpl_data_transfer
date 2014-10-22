@@ -80,7 +80,7 @@ function ftpget {
 			for ((k = $j; k < $max_k; k++))
 			do
 				{
-					curl -u $FTP_USER:$FTP_PASSWD $ipv6 ftp://$target$source$name.$k -o $destination$name.$k
+					curl -u $FTP_USER:$FTP_PASSWD $ipv6 ftp://$target$source$name.$k -o $destination$name.$k > /dev/null
 				}&
 			done
 			wait
@@ -89,7 +89,7 @@ function ftpget {
 }
 
 function ftpput {
-	curl -u $FTP_USER:$FTP_PASSWD --ftp-create-dirs $ipv6 ftp://$target$destination
+	curl -u $FTP_USER:$FTP_PASSWD --ftp-create-dirs $ipv6 ftp://$target$destination > /dev/null
 	for ((i = 0; i < $number; i = i + $member))
 	do
 		max_j=`min $number $[$member + $i]`
@@ -99,7 +99,7 @@ function ftpput {
 			for ((k = $j; k < $max_k; k++))
 			do
 				{
-					curl -u $FTP_USER:$FTP_PASSWD $ipv6 ftp://$target$destination$name.$k -T $source$name.$k
+					curl -u $FTP_USER:$FTP_PASSWD $ipv6 ftp://$target$destination$name.$k -T $source$name.$k > /dev/null
 				}&
 			done
 			wait
@@ -118,7 +118,7 @@ function httpget {
 			for ((k = $j; k < $max_k; k++))
 			do
 				{
-					curl $ipv6 http://$target$source$name.$k -o $destination$name.$k
+					curl $ipv6 http://$target$source$name.$k -o $destination$name.$k > /dev/null
 				}&
 			done
 			wait
