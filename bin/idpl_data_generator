@@ -6,13 +6,13 @@ then
 	exit 2
 fi
 
-eval set -- `getopt -o "d:n:s:N:u:h" -l "dictionary:,name:,size:,number:unit:,help" -n "idpl_data_generator.sh" -- "$@"`
+eval set -- `getopt -o "d:n:s:N:u:h" -l "directory:,name:,size:,number:unit:,help" -n "idpl_data_generator.sh" -- "$@"`
 
 while [ -n "${1}" ]
 do
 	case ${1} in
-	-d|--dictionary)
-		dictionary=${2}
+	-d|--directory)
+		directory=${2}
 		shift;;
 	-n|--name)
 		name=${2}
@@ -36,9 +36,9 @@ do
 	shift
 done
 
-mkdir -p $dictionary
+mkdir -p $directory
 
 for (( i = 0; i < $number; i++ ))
 do
-	dd if=/dev/zero of=$dictionary/$name.$i bs=$size$unit seek=1 count=0 > /dev/null
+	dd if=/dev/zero of=$directory/$name.$i bs=$size$unit seek=1 count=0 > /dev/null
 done

@@ -9,7 +9,7 @@ then
 	exit 2
 fi
 
-eval set -- `getopt -o "t:d:n:p:N:6h" -l "target:,dictionary:,name:,protocol:,number:,ipv6,help" -n "idpl_data_rm.sh" -- "$@"`
+eval set -- `getopt -o "t:d:n:p:N:6h" -l "target:,directory:,name:,protocol:,number:,ipv6,help" -n "idpl_data_rm.sh" -- "$@"`
 
 while [ -n "${1}" ]
 do
@@ -17,7 +17,7 @@ do
 	-t|--target)
 		target=${2}
 		shift;;
-	-d|--dictionary)
+	-d|--directory)
 		dic=${2}
 		shift;;
 	-n|--name)
